@@ -6,20 +6,14 @@ public class Worker extends Thread {
   int waitInterval = 5;
   ReentrantLock lock = new ReentrantLock();
   Clock clock;
-  Cup cup;
-  Glass glass;
-  Coffee coffee;
+  Cupboard cupboard;
   JuiceFountain juiceFountain;
-  Milk milk;
 
-  Worker(int id, Clock clock, Cup cup, Glass glass, Coffee coffee, JuiceFountain juiceFountain, Milk milk) {
+  Worker(int id, Clock clock, Cupboard cupboard, JuiceFountain juiceFountain) {
     this.id = id;
     this.clock = clock;
-    this.cup = cup;
-    this.glass = glass;
-    this.coffee = coffee;
+    this.cupboard = cupboard;
     this.juiceFountain = juiceFountain;
-    this.milk = milk;
   };
 
   // take customers' order
@@ -53,12 +47,10 @@ public class Worker extends Thread {
   };
 
   public void serveCappuccino() {
-    Boolean checkCup = false, checkCoffee = false, checkMilk = false;
+    Boolean checkCoffee = false, checkMilk = false;
     // take cup
-    do
-      checkCup = cup.check();
-    while (!checkCup);
-    cup.take();
+    cupboard.open(this);
+    cupboard.takeCup(this);
 
     // take coffee and milk
     do {
@@ -71,61 +63,65 @@ public class Worker extends Thread {
       };
 
       // check if ingredients are available
-      checkCoffee = coffee.check();
-      checkMilk = milk.check();
-      // if (checkCoffee)
-      //   System.out.println("Worker " + id + " took coffee");
-      // if (checkMilk)
-      //   System.out.println("Worker " + id + " took milk");
+      if (!cupboard.lock.isHeldByCurrentThread())
+        cupboard.open(this);
+      checkCoffee = cupboard.takeCoffee(this);
+      checkMilk = cupboard.takeMilk(this);
+      if (checkCoffee)
+        System.out.println("Worker " + id + " took coffee");
+      if (checkMilk)
+        System.out.println("Worker " + id + " took milk");
   
       if (checkCoffee && checkMilk) {
+        cupboard.close(this);
         // increase wait time
         waitTime += waitInterval;
         break;
       } else if (checkCoffee) {
         // release unused ingredient
-        coffee.release();
+        cupboard.returnCoffee(this);
       } else if (checkMilk) {
         // release unused ingredient
-        milk.release();
+        cupboard.returnMilk(this);
       };
+      cupboard.close(this);
 
       // decrease wait time
       if (waitTime > waitInterval)
           waitTime -= waitInterval;
     } while (!checkCoffee || !checkMilk);
 
-    coffee.use();
-    milk.use();
-    coffee.release();
-    milk.release();
+    // pour ingredients
+    try {
+      Thread.sleep(2000);
+    } catch (Exception e) {};
+
+    // return ingredients
+    cupboard.open(this);
+    cupboard.returnCoffee(this);
+    cupboard.returnMilk(this);
+    cupboard.close(this);
 
     // mixing drink
     //System.out.println("Worker " + id + " mixing drink");
     try {
-      Thread.sleep(1000);
+      Thread.sleep(500);
     } catch (Exception e) {};
   };
 
   public void serveFruitJuice() {
-    Boolean checkGlass = false, checkFountain = false;
     // take glass
-    do
-      checkGlass = glass.check();
-    while (!checkGlass);
-    glass.take();
+    cupboard.open(this);
+    cupboard.takeGlass(this);
+    cupboard.close(this);
 
     // use juice fountain
-    do
-      checkFountain = juiceFountain.check();
-    while (!checkFountain);
-    juiceFountain.use();
-    juiceFountain.release();
+    juiceFountain.use(this);
 
     // fill the glass
     //System.out.println("Worker " + id + " filling glass");
     try {
-      Thread.sleep(1000);
+      Thread.sleep(500);
     } catch (Exception e) {};
   };
 };

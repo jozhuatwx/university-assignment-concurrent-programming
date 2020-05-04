@@ -2,8 +2,8 @@ public class Owner extends Worker {
   Seats seats;
   Waiter[] waiters;
 
-  Owner(Clock clock, Seats seats, Cup cup, Glass glass, Coffee coffee, JuiceFountain juiceFountain, Milk milk, Waiter[] waiters) {
-    super(0, clock, cup, glass, coffee, juiceFountain, milk);
+  Owner(Clock clock, Seats seats, Cupboard cupboard, JuiceFountain juiceFountain, Waiter[] waiters) {
+    super(0, clock, cupboard, juiceFountain);
     this.seats = seats;
     this.waiters = waiters;
     this.setPriority(Thread.MAX_PRIORITY);
