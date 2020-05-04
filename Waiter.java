@@ -1,7 +1,7 @@
 public class Waiter extends Worker {
   Boolean working = true;
-  Waiter(int id, Clock clock) {
-    super(id, clock);
+  Waiter(int id, Clock clock, Cup cup, Glass glass, Coffee coffee, JuiceFountain juiceFountain, Milk milk) {
+    super(id, clock, cup, glass, coffee, juiceFountain, milk);
     this.setPriority(9);
   };
 

@@ -2,8 +2,8 @@ public class Owner extends Worker {
   Seats seats;
   Waiter[] waiters;
 
-  Owner(Clock clock, Seats seats, Waiter[] waiters) {
-    super(0, clock);
+  Owner(Clock clock, Seats seats, Cup cup, Glass glass, Coffee coffee, JuiceFountain juiceFountain, Milk milk, Waiter[] waiters) {
+    super(0, clock, cup, glass, coffee, juiceFountain, milk);
     this.seats = seats;
     this.waiters = waiters;
     this.setPriority(Thread.MAX_PRIORITY);
@@ -15,30 +15,23 @@ public class Owner extends Worker {
       try {
         // wait for last call
         clock.wait();
-        // synchronized (this) {
-        //   this.notifyAll();
-        // };
         System.out.println("Last call!");
       } catch (Exception e) {};
     };
 
     // check if there are still customers
-    while (true) {
-      if (!seats.hasCustomers()) {
-        break;
-      };
+    while (seats.hasCustomers()) {
+      try {
+        Thread.sleep(1);
+      } catch (Exception e) {};
     };
 
     // check if all waiters have left
     for (int i = 0; i < waiters.length; i++) {
-      while (true) {
-        if (!waiters[i].isWorking()) {
-          break;
-        } else {
-          try {
-            Thread.sleep(1);
-          } catch (Exception e) {};
-        };
+      while (waiters[i].isWorking()) {
+        try {
+          Thread.sleep(1);
+        } catch (Exception e) {};
       };
     };
     
