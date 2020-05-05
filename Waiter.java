@@ -1,7 +1,10 @@
 public class Waiter extends Worker {
   Boolean working = true;
+
+  // constructor
   Waiter(int id, Clock clock, Cupboard cupboard, JuiceFountain juiceFountain) {
     super(id, clock, cupboard, juiceFountain);
+    setName("Waiter " + id);
     this.setPriority(9);
   };
 
@@ -17,7 +20,7 @@ public class Waiter extends Worker {
           // finish current serve and prevent future serve
           lock.lock();
           // leave café
-          System.out.println("Worker " + id + " left");
+          System.out.println(getName() + " left");
           // set as no longer working
           working = false;
         } catch (Exception e) {};
@@ -25,6 +28,7 @@ public class Waiter extends Worker {
     }
   };
 
+  // check if waiter is working
   public Boolean isWorking() {
     return working;
   };

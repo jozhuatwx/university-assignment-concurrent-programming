@@ -1,22 +1,26 @@
 import java.util.Random;
 
 public class Customers extends Thread {
-  int id = 0;
+  int id = 1;
   Clock clock;
   Seats seats;
   Waiter[] waiters;
   Owner owner;
+  Statistics stats;
   int drink = 0;
   int ratioCappuccino;
   int ratioFruitJuice;
   int cappuccinoCount = 0;
   int fruitJuiceCount = 0;
 
-  Customers(Clock clock, Seats seats, Waiter[] waiters, Owner owner, int ratioCappuccino, int ratioFruitJuice) {
+  // constructor
+  Customers(Clock clock, Seats seats, Waiter[] waiters, Owner owner, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
+    this.setName("Customers");
     this.clock = clock;
     this.seats = seats;
     this.waiters = waiters;
     this.owner = owner;
+    this.stats = stats;
     this.ratioCappuccino = ratioCappuccino;
     this.ratioFruitJuice = ratioFruitJuice;
   };
@@ -28,21 +32,24 @@ public class Customers extends Thread {
       int numberOfCustomers = (new Random().nextInt(5) + 1);
       // allocate seats for customers
       for (; numberOfCustomers > 0 && seats.seat.availablePermits() > 0; numberOfCustomers--, id++) {
-        Customer customer = new Customer(id, seats, waiters, owner, drinkRatio());
+        Customer customer = new Customer(clock, id, seats, waiters, owner, stats, drinkRatio());
         seats.takeSeat(customer);
         customer.start();
+        System.out.println(customer.getName() + " is seated");
       };
       // announce that there are no seats left
       if (numberOfCustomers > 0) {
         System.out.println("No seats left");
+        stats.numberOfPotential += numberOfCustomers;
       };
       // random interval to next batch
       try {
-        Thread.sleep((new Random().nextInt(5) + 1) * 1000);
+        Thread.sleep((new Random().nextInt(5) + 1) * 500);
       } catch (Exception e) {};
     };
   };
 
+  // set customer preference 
   public int drinkRatio() {
     if (drink == 0) {
       // serve cappuccino

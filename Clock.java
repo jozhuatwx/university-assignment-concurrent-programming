@@ -3,7 +3,9 @@ public class Clock extends Thread {
   int lastOrder;
   int closing;
 
+  // constructor
   Clock(int lastOrder, int closing) {
+    this.setName("Clock");
     this.lastOrder = lastOrder;
     this.closing = closing;
   };

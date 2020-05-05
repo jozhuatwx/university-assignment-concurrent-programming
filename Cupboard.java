@@ -1,49 +1,77 @@
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Cupboard {
+  // initialise
   ReentrantLock lock = new ReentrantLock();
-  ReentrantLock coffeeLock = new ReentrantLock();
-  ReentrantLock milkLock = new ReentrantLock();
 
-  public void open(Worker worker) {
-    lock.lock();
-    System.out.println("Worker " + worker.id + " opened cupboard");
+  Semaphore coffee;
+  Semaphore milk;
+
+  // constructor
+  Cupboard(int numberOfCoffees, int numberOfMilks) {
+    this.coffee = new Semaphore(numberOfCoffees);
+    this.milk = new Semaphore(numberOfMilks);
   };
 
-  public void close(Worker worker) {
-    System.out.println("Worker " + worker.id + " closed cupboard");
+  // cupboard
+  public void open() {
+    // open the cupboard
+    lock.lock();
+  };
+
+  public void close() {
+    // close the cupboard
     lock.unlock();
   };
 
-  public void takeCup(Worker worker) {
-    System.out.println("Worker " + worker.id + " takes cup");
+  // cup
+  public void takeCup() {
+    // take a cup
     try {
       Thread.sleep(1000);
     } catch (Exception e) {};
   };
 
-  public void takeGlass(Worker worker) {
-    System.out.println("Worker " + worker.id + " takes glass");
+  // glass
+  public void takeGlass() {
+    // take a glass
     try {
       Thread.sleep(1000);
     } catch (Exception e) {};
   };
 
-  public Boolean takeCoffee(Worker worker) {
-    return coffeeLock.tryLock();
+  // coffee
+  public Boolean takeCoffee() {
+    // take coffee
+    if (coffee.availablePermits() > 0) {
+      try {
+        coffee.acquire();
+      } catch (Exception e) {};
+      return true;
+    };
+    return false;
   };
 
-  public void returnCoffee(Worker worker) {
-    System.out.println("Worker " + worker.id + " returns coffee");
-    coffeeLock.unlock();
+  public void returnCoffee() {
+    // return coffee
+    coffee.release();
   };
 
-  public Boolean takeMilk(Worker worker) {
-    return milkLock.tryLock();
+  // milk
+  public Boolean takeMilk() {
+    // take milk
+    if (milk.availablePermits() > 0) {
+      try {
+        milk.acquire();
+      } catch (Exception e) {};
+      return true;
+    };
+    return false;
   };
 
-  public void returnMilk(Worker worker) {
-    System.out.println("Worker " + worker.id + " returns milk");
-    milkLock.unlock();
+  public void returnMilk() {
+    // return milk
+    milk.release();
   };
 };

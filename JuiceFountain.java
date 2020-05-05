@@ -1,6 +1,7 @@
 public class JuiceFountain {
-  synchronized public void use(Worker worker) {
-    System.out.println("Worker " + worker.id + " using fountain");
+  // only one worker can access
+  synchronized public void use() {
+    // use the fountain
     try {
       Thread.sleep(1000);
     } catch (Exception e) {};

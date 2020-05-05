@@ -7,6 +7,7 @@ public class Seats {
   Semaphore seat;
   LinkedList<Customer> customers = new LinkedList<Customer>();
 
+  // constructor
   Seats(Clock clock, int total) {
     this.clock = clock;
     this.total = total;
