@@ -155,16 +155,12 @@ public class Worker extends Thread {
     
     // use juice fountain
     try {
+      // fill the glass
+      System.out.println(getName() + " filling glass");
       Thread.sleep((new Random().nextInt(15) + 10) * 100);
     } catch (Exception e) {};
     System.out.println(getName() + " closed juice fountain tap");
     juiceFountain.closeTap();
-
-    // fill the glass
-    System.out.println(getName() + " filling glass");
-    try {
-      Thread.sleep(500);
-    } catch (Exception e) {};
   };
 
   // check if waiter is working
