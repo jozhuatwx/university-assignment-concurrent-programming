@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Customers extends Thread {
+public class Crowd extends Thread {
   int id = 1;
   Clock clock;
   Seats seats;
@@ -10,7 +10,7 @@ public class Customers extends Thread {
   int ratioFruitJuice;
 
   // constructor
-  Customers(Clock clock, Seats seats, Worker[] workers, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
+  Crowd(Clock clock, Seats seats, Worker[] workers, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
     this.setName("Customers");
     this.clock = clock;
     this.seats = seats;

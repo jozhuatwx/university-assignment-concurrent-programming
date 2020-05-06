@@ -30,17 +30,17 @@ public class Main {
     workers[0] = owner;
     for (int i = 0; i < waiters.length; i++)
       workers[i + 1] = waiters[i];
-    Customers customers = new Customers(clock, seats, workers, stats, RATIO_CAPPUCCINO, RATIO_FRUIT_JUICE);
+    Crowd crowd = new Crowd(clock, seats, workers, stats, RATIO_CAPPUCCINO, RATIO_FRUIT_JUICE);
 
     // start threads
     clock.start();
     for (int i = 0; i < workers.length; i++)
       workers[i].start();
-    customers.start();
+    crowd.start();
 
     // wait for all threads to stop
     try {
-      customers.join();
+      crowd.join();
       clock.join();
       for (int i = 0; i < workers.length; i++)
         workers[i].join();
