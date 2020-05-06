@@ -49,7 +49,7 @@ public class Main {
 
     // print statistics
     System.out.println("\nTotal customers served: " + stats.numberOfServed);
-    System.out.println("Average serve time: " + ((stats.totalElapsedTime / stats.numberOfServed) / 1000000) + "ms");
+    System.out.println("Average elapsed time: " + ((stats.totalElapsedTime / stats.numberOfServed) / 1000000) + "ms");
     System.out.println("\nTotal customers unserved: " + stats.numberOfUnserved);
     System.out.println("Total customers left without a seat: " + stats.numberOfPotential);
   };

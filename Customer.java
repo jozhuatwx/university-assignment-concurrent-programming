@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Customer extends Thread {
   Boolean ordered = false;
   Clock clock;
@@ -51,6 +53,11 @@ public class Customer extends Thread {
           ordered = true;
           // asks worker to serve order
           workers[i].serveOrder(this);
+          // random drinking time
+          System.out.println(getName() + " is drinking " + drinkName(drink));
+          try {
+            Thread.sleep((new Random().nextInt(5) + 1) * 500);
+          } catch (Exception e) {};
           // set end time
           endTime = System.nanoTime();
           // increment the number of customers served
