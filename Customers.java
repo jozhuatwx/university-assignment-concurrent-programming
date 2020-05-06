@@ -10,8 +10,6 @@ public class Customers extends Thread {
   int drink = 0;
   int ratioCappuccino;
   int ratioFruitJuice;
-  int cappuccinoCount = 0;
-  int fruitJuiceCount = 0;
 
   // constructor
   Customers(Clock clock, Seats seats, Waiter[] waiters, Owner owner, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
@@ -51,24 +49,14 @@ public class Customers extends Thread {
 
   // set customer preference 
   public int drinkRatio() {
-    if (drink == 0) {
-      // serve cappuccino
-      if (++cappuccinoCount == ratioCappuccino && ratioFruitJuice > 0) {
-        // reset cappuccino count if ratio is met
-        cappuccinoCount = 0;
-        // set to serve fruit juice next
-        drink = 1;
-      };
+    // randomly select a number
+    int rand = new Random().nextInt(ratioFruitJuice + ratioCappuccino) + 1;
+
+    if (rand <= ratioCappuccino)
+      // set order as cappuccino
       return 0;
-    } else {
-      // serve fruit juice
-      if (++fruitJuiceCount == ratioFruitJuice && ratioFruitJuice > 0) {
-        // reset fruit juice count if ratio is met
-        fruitJuiceCount = 0;
-        // set to serve cappuccino next
-        drink = 0;
-      };
+    else
+      // set order as fruit juice
       return 1;
-    }
   };
 };
