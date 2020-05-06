@@ -18,6 +18,9 @@ public class Customer extends Thread {
 
   @Override
   public void run() {
+    // set start time
+    long startTime = System.nanoTime();
+    long endTime = 0;
     int index;
     int i, totalWorkers;
     // wait for turn
@@ -48,6 +51,8 @@ public class Customer extends Thread {
           ordered = true;
           // asks worker to serve order
           workers[i].serveOrder(this);
+          // set end time
+          endTime = System.nanoTime();
           // increment the number of customers served
           stats.numberOfServed++;
           break;
@@ -57,6 +62,9 @@ public class Customer extends Thread {
     // leave seat
     System.out.println(getName() + " left");
     seats.leaveSeat(this);
+    // count elapsed time
+    if (ordered)
+      stats.addElapsedTime(endTime - startTime);
   };
 
   public String drinkName(int drink) {

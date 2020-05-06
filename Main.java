@@ -4,7 +4,7 @@ public class Main {
     // set number of each ingredient
     final int COFFEE = 1;
     final int MILK = 1;
-    final int FOUNTAIN_TAP = 2;
+    final int FOUNTAIN_TAP = 1;
     // set last call and closing time
     final int LAST_CALL = 15;
     final int CLOSING_TIME = 20;
@@ -14,7 +14,7 @@ public class Main {
     final int SEAT = 10;
     // set ratio of cappuccino against fruit juice
     final int RATIO_CAPPUCCINO = 1;
-    final int RATIO_FRUIT_JUICE = 0;
+    final int RATIO_FRUIT_JUICE = 1;
 
     // initialise
     Statistics stats = new Statistics();
@@ -48,7 +48,8 @@ public class Main {
 
     // print statistics
     System.out.println("\nTotal customers served: " + stats.numberOfServed);
-    System.out.println("Total customers unserved: " + stats.numberOfUnserved);
+    System.out.println("Average serve time: " + ((stats.totalElapsedTime / stats.numberOfServed) / 1000000) + "ms");
+    System.out.println("\nTotal customers unserved: " + stats.numberOfUnserved);
     System.out.println("Total customers left without a seat: " + stats.numberOfPotential);
   };
 };
