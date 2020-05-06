@@ -1,6 +1,8 @@
+import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Worker extends Thread {
+  Boolean working = true;
   int id;
   int waitTime = 1;
   int waitInterval = 5;
@@ -9,6 +11,7 @@ public class Worker extends Thread {
   Cupboard cupboard;
   JuiceFountain juiceFountain;
 
+  // constructor
   Worker(int id, Clock clock, Cupboard cupboard, JuiceFountain juiceFountain) {
     this.id = id;
     this.clock = clock;
@@ -23,33 +26,31 @@ public class Worker extends Thread {
 
   // serve customers' order
   public void serveOrder(Customer customer) {
-    try {
-      // random order
-      switch (customer.drink) {
-          // cappuccino
-        case 0:
-          serveCappuccino();
-          System.out.println(getName() + " served " + customer.getName());
-          break;
+    // random order
+    switch (customer.drink) {
+        // cappuccino
+      case 0:
+        serveCappuccino();
+        System.out.println(getName() + " served " + customer.getName());
+        break;
 
-          // fruit juice
-        case 1:
-          serveFruitJuice();
-          System.out.println(getName() + " served " + customer.getName());
-          break;
-      
-        default:
-          break;
-      };
-
-      lock.unlock();
-    } catch (Exception e) {};
+        // fruit juice
+      case 1:
+        serveFruitJuice();
+        System.out.println(getName() + " served " + customer.getName());
+        break;
+    
+      default:
+        break;
+    };
+    
+    lock.unlock();
   };
 
   // serve cappucino
   public void serveCappuccino() {
     Boolean checkCoffee = false, checkMilk = false;
-    // take cup
+    // take a cup
     cupboard.open();
 
     cupboard.takeCup();
@@ -61,7 +62,7 @@ public class Worker extends Thread {
       if (!clock.isLastOrder() || id != 0) {
         try {
           // set wait time to prioritise number of executions and id
-          Thread.sleep(waitTime * id * 3);
+          Thread.sleep(waitTime * id);
         } catch (Exception e) {};
       };
 
@@ -101,7 +102,7 @@ public class Worker extends Thread {
     // pour ingredients
     System.out.println(getName() + " pouring ingredients");
     try {
-      Thread.sleep(2000);
+      Thread.sleep((new Random().nextInt(20) + 10) * 100);
     } catch (Exception e) {};
 
     // return ingredients
@@ -124,7 +125,8 @@ public class Worker extends Thread {
 
   // serve fruit juice
   public void serveFruitJuice() {
-    // take glass
+    Boolean checkTap = false;
+    // take a glass
     cupboard.open();
 
     cupboard.takeGlass();
@@ -133,13 +135,40 @@ public class Worker extends Thread {
     cupboard.close();
 
     // use juice fountain
-    juiceFountain.use();
-    System.out.println(getName() + " used the juice fountain");
+    do {
+      // reduce speed
+      if (!clock.isLastOrder() || id != 0) {
+        try {
+          // set wait time to prioritise number of executions and id
+          Thread.sleep(waitTime * id);
+        } catch (Exception e) {};
+      };
+
+      checkTap = juiceFountain.openTap();
+      if (checkTap)
+        System.out.println(getName() + " opened juice fountain tap");
+
+      // decrease wait time
+      if (waitTime > waitInterval)
+      waitTime -= waitInterval;
+    } while (!checkTap);
+    
+    // use juice fountain
+    try {
+      Thread.sleep((new Random().nextInt(15) + 10) * 100);
+    } catch (Exception e) {};
+    System.out.println(getName() + " closed juice fountain tap");
+    juiceFountain.closeTap();
 
     // fill the glass
     System.out.println(getName() + " filling glass");
     try {
       Thread.sleep(500);
     } catch (Exception e) {};
+  };
+
+  // check if waiter is working
+  public Boolean isWorking() {
+    return working;
   };
 };

@@ -1,6 +1,4 @@
 public class Waiter extends Worker {
-  Boolean working = true;
-
   // constructor
   Waiter(int id, Clock clock, Cupboard cupboard, JuiceFountain juiceFountain) {
     super(id, clock, cupboard, juiceFountain);
@@ -10,26 +8,19 @@ public class Waiter extends Worker {
 
   @Override
   public void run() {
-    while (!clock.isClosing()) {
-      synchronized (clock) {
-        try {
-          // wait for last call
-          clock.wait();
-          // wait for closing
-          clock.wait();
-          // finish current serve and prevent future serve
-          lock.lock();
-          // leave café
-          System.out.println(getName() + " left");
-          // set as no longer working
-          working = false;
-        } catch (Exception e) {};
-      };
-    }
-  };
-
-  // check if waiter is working
-  public Boolean isWorking() {
-    return working;
+    synchronized (clock) {
+      try {
+        // wait for last call
+        clock.wait();
+        // wait for closing
+        clock.wait();
+        // finish current serve and prevent future serve
+        lock.lock();
+        // leave café
+        System.out.println(getName() + " left");
+        // set as no longer working
+        working = false;
+      } catch (Exception e) {};
+    };
   };
 };

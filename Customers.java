@@ -4,20 +4,17 @@ public class Customers extends Thread {
   int id = 1;
   Clock clock;
   Seats seats;
-  Waiter[] waiters;
-  Owner owner;
+  Worker[] workers;
   Statistics stats;
-  int drink = 0;
   int ratioCappuccino;
   int ratioFruitJuice;
 
   // constructor
-  Customers(Clock clock, Seats seats, Waiter[] waiters, Owner owner, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
+  Customers(Clock clock, Seats seats, Worker[] workers, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
     this.setName("Customers");
     this.clock = clock;
     this.seats = seats;
-    this.waiters = waiters;
-    this.owner = owner;
+    this.workers= workers;
     this.stats = stats;
     this.ratioCappuccino = ratioCappuccino;
     this.ratioFruitJuice = ratioFruitJuice;
@@ -30,7 +27,7 @@ public class Customers extends Thread {
       int numberOfCustomers = (new Random().nextInt(5) + 1);
       // allocate seats for customers
       for (; numberOfCustomers > 0 && seats.seat.availablePermits() > 0; numberOfCustomers--, id++) {
-        Customer customer = new Customer(clock, id, seats, waiters, owner, stats, drinkRatio());
+        Customer customer = new Customer(clock, id, seats, workers, stats, drinkRatio());
         seats.takeSeat(customer);
         customer.start();
         System.out.println(customer.getName() + " is seated");
@@ -55,8 +52,7 @@ public class Customers extends Thread {
     if (rand <= ratioCappuccino)
       // set order as cappuccino
       return 0;
-    else
-      // set order as fruit juice
-      return 1;
+    // set order as fruit juice
+    return 1;
   };
 };

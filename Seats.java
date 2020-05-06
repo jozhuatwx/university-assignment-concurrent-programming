@@ -1,23 +1,23 @@
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 public class Seats {
   Clock clock;
-  int total;
   Semaphore seat;
   LinkedList<Customer> customers = new LinkedList<Customer>();
 
   // constructor
-  Seats(Clock clock, int total) {
+  Seats(Clock clock, int seat) {
     this.clock = clock;
-    this.total = total;
-    this.seat = new Semaphore(total);
+    this.seat = new Semaphore(seat);
   };
 
   public void takeSeat(Customer customer) {
     try {
       // take seat
       seat.acquire();
+      Thread.sleep((new Random().nextInt(2) + 1) * 100);
     } catch (Exception e) {};
 
     // add customer to list
@@ -29,13 +29,9 @@ public class Seats {
     customers.remove(customer);
 
     try {
+      Thread.sleep((new Random().nextInt(2) + 1) * 100);
       // release seat
       seat.release();
     } catch (Exception e) {};
-  };
-
-  // check if seats have any customers
-  public Boolean hasCustomers() {
-    return (seat.availablePermits() != total ? true : false);
   };
 };

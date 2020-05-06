@@ -1,3 +1,5 @@
+import java.util.ListIterator;
+
 public class Owner extends Worker {
   Seats seats;
   Waiter[] waiters;
@@ -21,26 +23,27 @@ public class Owner extends Worker {
         // wait for closing time
         clock.wait();
         System.out.println(getName() + ": Closing time!");
+        // finish current serve and prevent future serve
+        lock.lock();
       } catch (Exception e) {};
     };
 
-    // check if there are still customers
-    while (seats.hasCustomers()) {
+    // wait for all waiters to leave
+    for (int i = 0; i < waiters.length; i++)
       try {
-        Thread.sleep(1);
+        waiters[i].join();
       } catch (Exception e) {};
-    };
 
-    // check if all waiters have left
-    for (int i = 0; i < waiters.length; i++) {
-      while (waiters[i].isWorking()) {
-        try {
-          Thread.sleep(1);
-        } catch (Exception e) {};
-      };
-    };
+    // wait for all customers to leave
+    ListIterator<Customer> iterator = seats.customers.listIterator();
+    while (iterator.hasNext())
+      try {
+        iterator.next().join();
+      } catch (Exception e) {};
     
     // leave café
     System.out.println(getName() + " left");
+    // set as no longer working
+    working = false;
   };
 };
