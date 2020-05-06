@@ -3,13 +3,11 @@ import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 public class Seats {
-  Clock clock;
   Semaphore seat;
   LinkedList<Customer> customers = new LinkedList<Customer>();
 
   // constructor
-  Seats(Clock clock, int seat) {
-    this.clock = clock;
+  Seats(int seat) {
     this.seat = new Semaphore(seat);
   };
 

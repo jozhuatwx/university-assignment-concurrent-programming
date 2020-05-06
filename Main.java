@@ -20,8 +20,9 @@ public class Main {
     Statistics stats = new Statistics();
     Cupboard cupboard = new Cupboard(COFFEE, MILK);
     JuiceFountain juiceFountain = new JuiceFountain(FOUNTAIN_TAP);
+    Seats seats = new Seats(SEAT);
+
     Clock clock = new Clock(LAST_CALL, CLOSING_TIME);
-    Seats seats = new Seats(clock, SEAT);
     Waiter waiters[] = new Waiter[WAITER];
     for (int i = 0; i < waiters.length;)
       waiters[i] = new Waiter(++i, clock, cupboard, juiceFountain);
