@@ -1,26 +1,34 @@
 public class Statistics {
-  int numberOfServed = 0;
-  int numberOfUnserved = 0;
-  int numberOfPotential = 0;
-  long totalElapsedTime = 0;
+  Integer numberOfServed = 0;
+  Integer numberOfUnserved = 0;
+  Integer numberOfPotential = 0;
+  Long totalElapsedTime = (long) 0;
 
   // add served
-  synchronized public void addServed() {
-    numberOfServed++;
+  public void addServed() {
+    synchronized (numberOfServed) {
+      numberOfServed++;
+    };
   };
 
   // add unserved
-  synchronized public void addUnserved() {
-    numberOfUnserved++;
+  public void addUnserved() {
+    synchronized (numberOfUnserved) {
+      numberOfUnserved++;
+    };
   };
 
   // add potential
-  synchronized public void addPotential(int potential) {
-    numberOfPotential += potential;
+  public void addPotential(int potential) {
+    synchronized (numberOfPotential) {
+      numberOfPotential += potential;
+    };
   };
 
   // add elapsed time
-  synchronized public void addElapsedTime(long elapsedTime) {
-    totalElapsedTime += elapsedTime;
+  public void addElapsedTime(long elapsedTime) {
+    synchronized (totalElapsedTime) {
+      totalElapsedTime += elapsedTime;
+    };
   };
 };
