@@ -1,14 +1,14 @@
 import java.util.ListIterator;
 
 public class Owner extends Worker {
-  Seats seats;
+  Table table;
   Waiter[] waiters;
 
   // constructor
-  Owner(Clock clock, Seats seats, Cupboard cupboard, JuiceFountain juiceFountain, Waiter[] waiters) {
+  Owner(Clock clock, Table table, Cupboard cupboard, JuiceFountain juiceFountain, Waiter[] waiters) {
     super(0, clock, cupboard, juiceFountain);
     setName("Owner");
-    this.seats = seats;
+    this.table = table;
     this.waiters = waiters;
     this.setPriority(Thread.MAX_PRIORITY);
   };
@@ -35,7 +35,7 @@ public class Owner extends Worker {
       } catch (Exception e) {};
 
     // wait for all customers to leave
-    ListIterator<Customer> iterator = seats.customers.listIterator();
+    ListIterator<Customer> iterator = table.customers.listIterator();
     while (iterator.hasNext())
       try {
         iterator.next().join();

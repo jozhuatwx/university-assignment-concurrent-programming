@@ -3,17 +3,17 @@ import java.util.Random;
 public class Crowd extends Thread {
   int id = 1;
   Clock clock;
-  Seats seats;
+  Table table;
   Worker[] workers;
   Statistics stats;
   int ratioCappuccino;
   int ratioFruitJuice;
 
   // constructor
-  Crowd(Clock clock, Seats seats, Worker[] workers, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
+  Crowd(Clock clock, Table table, Worker[] workers, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
     this.setName("Customers");
     this.clock = clock;
-    this.seats = seats;
+    this.table = table;
     this.workers= workers;
     this.stats = stats;
     this.ratioCappuccino = ratioCappuccino;
@@ -26,9 +26,9 @@ public class Crowd extends Thread {
       // random number of customers
       int numberOfCustomers = (new Random().nextInt(5) + 1);
       // allocate seats for customers
-      for (; numberOfCustomers > 0 && seats.seat.availablePermits() > 0; numberOfCustomers--, id++) {
-        Customer customer = new Customer(clock, id, seats, workers, stats, drinkRatio());
-        seats.takeSeat(customer);
+      for (; numberOfCustomers > 0 && table.seat.availablePermits() > 0; numberOfCustomers--, id++) {
+        Customer customer = new Customer(clock, id, table, workers, stats, drinkRatio());
+        table.takeSeat(customer);
         customer.start();
         System.out.println(customer.getName() + " is seated");
       };

@@ -2,12 +2,12 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
-public class Seats {
+public class Table {
   Semaphore seat;
   LinkedList<Customer> customers = new LinkedList<Customer>();
 
   // constructor
-  Seats(int NUM_OF_SEAT) {
+  Table(int NUM_OF_SEAT) {
     this.seat = new Semaphore(NUM_OF_SEAT);
   };
 

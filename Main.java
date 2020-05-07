@@ -20,18 +20,18 @@ public class Main {
     Statistics stats = new Statistics();
     Cupboard cupboard = new Cupboard(NUM_OF_COFFEE, NUM_OF_MILK);
     JuiceFountain juiceFountain = new JuiceFountain(NUM_OF_FOUNTAIN_TAP);
-    Seats seats = new Seats(NUM_OF_SEAT);
+    Table table = new Table(NUM_OF_SEAT);
 
     Clock clock = new Clock(LAST_CALL_TIME, CLOSING_TIME);
     Waiter waiters[] = new Waiter[NUM_OF_WAITER];
     for (int i = 0; i < waiters.length;)
       waiters[i] = new Waiter(++i, clock, cupboard, juiceFountain);
-    Owner owner = new Owner(clock, seats, cupboard, juiceFountain, waiters);
+    Owner owner = new Owner(clock, table, cupboard, juiceFountain, waiters);
     Worker workers[] = new Worker[NUM_OF_WAITER + 1];
     workers[0] = owner;
     for (int i = 0; i < waiters.length; i++)
       workers[i + 1] = waiters[i];
-    Crowd crowd = new Crowd(clock, seats, workers, stats, RATIO_CAPPUCCINO, RATIO_FRUIT_JUICE);
+    Crowd crowd = new Crowd(clock, table, workers, stats, RATIO_CAPPUCCINO, RATIO_FRUIT_JUICE);
 
     // start threads
     clock.start();

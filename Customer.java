@@ -3,16 +3,16 @@ import java.util.Random;
 public class Customer extends Thread {
   Boolean ordered = false;
   Clock clock;
-  Seats seats;
+  Table table;
   Worker[] workers;
   int drink;
   Statistics stats;
 
   // constructor
-  Customer(Clock clock, int id, Seats seats, Worker[] workers, Statistics stats, int drink) {
+  Customer(Clock clock, int id, Table table, Worker[] workers, Statistics stats, int drink) {
     setName("Customer " + id);
     this.clock = clock;
-    this.seats = seats;
+    this.table = table;
     this.workers = workers;
     this.stats = stats;
     this.drink = drink;
@@ -32,7 +32,7 @@ public class Customer extends Thread {
         if (workers[i].isWorking())
           totalWorkers++;
       // check if customer is next to be served
-      index = seats.customers.indexOf(this);
+      index = table.customers.indexOf(this);
       if (index >= 0 && index < totalWorkers)
         break;
     } while (!ordered);
@@ -66,7 +66,7 @@ public class Customer extends Thread {
 
     // leave seat
     System.out.println(getName() + " left");
-    seats.leaveSeat(this);
+    table.leaveSeat(this);
     // statistics
     if (ordered) {
       // count elapsed time
