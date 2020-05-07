@@ -1,34 +1,30 @@
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Statistics {
-  Integer numberOfServed = 0;
-  Integer numberOfUnserved = 0;
-  Integer numberOfPotential = 0;
-  Long totalElapsedTime = (long) 0;
+  // initialise
+  AtomicInteger numberOfServed = new AtomicInteger(0);
+  AtomicInteger numberOfUnserved = new AtomicInteger(0);
+  AtomicInteger numberOfPotential = new AtomicInteger(0);
+  AtomicLong totalElapsedTime = new AtomicLong(0);
 
   // add served
   public void addServed() {
-    synchronized (numberOfServed) {
-      numberOfServed++;
-    };
+    numberOfServed.incrementAndGet();
   };
 
   // add unserved
   public void addUnserved() {
-    synchronized (numberOfUnserved) {
-      numberOfUnserved++;
-    };
+    numberOfUnserved.incrementAndGet();
   };
 
   // add potential
   public void addPotential(int potential) {
-    synchronized (numberOfPotential) {
-      numberOfPotential += potential;
-    };
+    numberOfPotential.addAndGet(potential);
   };
 
   // add elapsed time
   public void addElapsedTime(long elapsedTime) {
-    synchronized (totalElapsedTime) {
-      totalElapsedTime += elapsedTime;
-    };
+    totalElapsedTime.addAndGet(elapsedTime);
   };
 };
