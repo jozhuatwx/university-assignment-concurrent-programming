@@ -4,8 +4,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Worker extends Thread {
   Boolean working = true;
   int id;
-  int waitTime = 1;
-  int waitInterval = 5;
+  int cooldown = 1;
+  final int COOLDOWN_INTERVAL = 5;
   ReentrantLock lock = new ReentrantLock();
   Clock clock;
   Cupboard cupboard;
@@ -59,12 +59,10 @@ public class Worker extends Thread {
     // take coffee and milk
     do {
       // reduce speed
-      if (!clock.isLastOrder() || id != 0) {
-        try {
-          // set wait time to prioritise number of executions and id
-          Thread.sleep(waitTime * id);
-        } catch (Exception e) {};
-      };
+      try {
+        // set wait time to prioritise number of executions and id
+        Thread.sleep(cooldown * id);
+      } catch (Exception e) {};
 
       // check if ingredients are available
       if (!cupboard.lock.isHeldByCurrentThread())
@@ -81,7 +79,7 @@ public class Worker extends Thread {
       if (checkCoffee && checkMilk) {
         cupboard.close();
         // increase wait time
-        waitTime += waitInterval;
+        cooldown += COOLDOWN_INTERVAL;
         break;
       } else if (checkCoffee) {
         // release unused coffee
@@ -95,8 +93,8 @@ public class Worker extends Thread {
       cupboard.close();
 
       // decrease wait time
-      if (waitTime > waitInterval)
-          waitTime -= waitInterval;
+      if (cooldown > COOLDOWN_INTERVAL)
+          cooldown -= COOLDOWN_INTERVAL;
     } while (!checkCoffee || !checkMilk);
 
     // pour ingredients
@@ -140,7 +138,7 @@ public class Worker extends Thread {
       if (!clock.isLastOrder() || id != 0) {
         try {
           // set wait time to prioritise number of executions and id
-          Thread.sleep(waitTime * id);
+          Thread.sleep(cooldown + (id * 10));
         } catch (Exception e) {};
       };
 
@@ -149,8 +147,8 @@ public class Worker extends Thread {
         System.out.println(getName() + " opened juice fountain tap");
 
       // decrease wait time
-      if (waitTime > waitInterval)
-      waitTime -= waitInterval;
+      if (cooldown > COOLDOWN_INTERVAL)
+      cooldown -= COOLDOWN_INTERVAL;
     } while (!checkTap);
     
     // use juice fountain

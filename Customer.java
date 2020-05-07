@@ -42,7 +42,7 @@ public class Customer extends Thread {
       // check if it is past closing time
       if (clock.isClosing()) {
         // increment the number of customers unserved
-        stats.numberOfUnserved++;
+        stats.addUnserved();
         break;
       };
 
@@ -60,8 +60,6 @@ public class Customer extends Thread {
           } catch (Exception e) {};
           // set end time
           endTime = System.nanoTime();
-          // increment the number of customers served
-          stats.numberOfServed++;
           break;
         };
     } while (!ordered);
@@ -69,9 +67,13 @@ public class Customer extends Thread {
     // leave seat
     System.out.println(getName() + " left");
     seats.leaveSeat(this);
-    // count elapsed time
-    if (ordered)
+    // statistics
+    if (ordered) {
+      // count elapsed time
       stats.addElapsedTime(endTime - startTime);
+      // increment the number of customers served
+      stats.addServed();
+    };
   };
 
   public String drinkName(int drink) {

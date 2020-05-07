@@ -10,9 +10,9 @@ public class Waiter extends Worker {
   public void run() {
     synchronized (clock) {
       try {
-        // wait for last call
+        // wait for last order time
         clock.wait();
-        // wait for closing
+        // wait for closing time
         clock.wait();
         // finish current serve and prevent future serve
         lock.lock();

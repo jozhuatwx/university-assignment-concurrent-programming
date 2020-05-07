@@ -10,9 +10,9 @@ public class Cupboard {
   Semaphore milk;
 
   // constructor
-  Cupboard(int numberOfCoffees, int numberOfMilks) {
-    this.coffee = new Semaphore(numberOfCoffees);
-    this.milk = new Semaphore(numberOfMilks);
+  Cupboard(int NUM_OF_COFFEE, int NUM_OF_MILK) {
+    this.coffee = new Semaphore(NUM_OF_COFFEE);
+    this.milk = new Semaphore(NUM_OF_MILK);
   };
 
   // cupboard

@@ -4,10 +4,10 @@ public class Clock extends Thread {
   int closing;
 
   // constructor
-  Clock(int lastOrder, int closing) {
+  Clock(int LAST_ORDER_TIME, int CLOSING_TIME) {
     this.setName("Clock");
-    this.lastOrder = lastOrder;
-    this.closing = closing;
+    this.lastOrder = LAST_ORDER_TIME;
+    this.closing = CLOSING_TIME;
   };
 
   @Override
@@ -23,7 +23,7 @@ public class Clock extends Thread {
       this.notifyAll();
     };
 
-    // last call time
+    // last order time
     for (; time < closing; time++)
       try {
         Thread.sleep(1000);

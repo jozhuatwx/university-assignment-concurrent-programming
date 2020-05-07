@@ -17,12 +17,12 @@ public class Owner extends Worker {
   public void run() {
     synchronized (clock) {
       try {
-        // wait for last call
+        // wait for last order time
         clock.wait();
-        System.out.println(getName() + ": Last call!");
+        System.out.println(getName() + ": Last order!");
         // wait for closing time
         clock.wait();
-        System.out.println(getName() + ": Closing time!");
+        System.out.println(getName() + ": Closing!");
         // finish current serve and prevent future serve
         lock.lock();
       } catch (Exception e) {};

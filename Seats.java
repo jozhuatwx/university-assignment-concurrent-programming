@@ -7,8 +7,8 @@ public class Seats {
   LinkedList<Customer> customers = new LinkedList<Customer>();
 
   // constructor
-  Seats(int seat) {
-    this.seat = new Semaphore(seat);
+  Seats(int NUM_OF_SEAT) {
+    this.seat = new Semaphore(NUM_OF_SEAT);
   };
 
   public void takeSeat(Customer customer) {

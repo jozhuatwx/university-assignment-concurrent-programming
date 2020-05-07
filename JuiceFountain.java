@@ -5,8 +5,8 @@ public class JuiceFountain {
   Semaphore tap;
 
   // constructor
-  JuiceFountain(int numberOfTaps) {
-    this.tap = new Semaphore(numberOfTaps);
+  JuiceFountain(int NUM_OF_FOUNTAIN_TAP) {
+    this.tap = new Semaphore(NUM_OF_FOUNTAIN_TAP);
   };
 
   // tap

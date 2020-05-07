@@ -35,7 +35,7 @@ public class Crowd extends Thread {
       // announce that there are no seats left
       if (numberOfCustomers > 0) {
         System.out.println("No seats left");
-        stats.numberOfPotential += numberOfCustomers;
+        stats.addPotential(numberOfCustomers);
       };
       // random interval to next batch
       try {
