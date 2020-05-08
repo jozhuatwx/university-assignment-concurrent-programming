@@ -19,14 +19,20 @@ public class Owner extends Worker {
       try {
         // wait for last order time
         clock.wait();
-        System.out.println(getName() + ": Last order!");
-        // wait for closing time
-        clock.wait();
-        System.out.println(getName() + ": Closing!");
-        // finish current serve and prevent future serve
-        lock.lock();
       } catch (Exception e) {};
     };
+    System.out.println(getName() + ": Last order!");
+
+    synchronized (clock) {
+      try {
+        // wait for closing time
+        clock.wait();
+      } catch (Exception e) {};
+    };
+    System.out.println(getName() + ": Closing!");
+
+    // finish current serve and prevent future serve
+    lock.lock();
 
     // wait for all waiters to leave
     for (int i = 0; i < waiters.length; i++)

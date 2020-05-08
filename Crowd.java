@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Crowd extends Thread {
   int id = 1;
@@ -6,25 +6,25 @@ public class Crowd extends Thread {
   Table table;
   Worker[] workers;
   Statistics stats;
-  int ratioCappuccino;
-  int ratioFruitJuice;
+  int RATIO_CAPPUCCINO;
+  int RATIO_FRUIT_JUICE;
 
   // constructor
-  Crowd(Clock clock, Table table, Worker[] workers, Statistics stats, int ratioCappuccino, int ratioFruitJuice) {
+  Crowd(Clock clock, Table table, Worker[] workers, Statistics stats, int RATIO_CAPPUCCINO, int RATIO_FRUIT_JUICE) {
     this.setName("Customers");
     this.clock = clock;
     this.table = table;
-    this.workers= workers;
+    this.workers = workers;
     this.stats = stats;
-    this.ratioCappuccino = ratioCappuccino;
-    this.ratioFruitJuice = ratioFruitJuice;
+    this.RATIO_CAPPUCCINO = RATIO_CAPPUCCINO;
+    this.RATIO_FRUIT_JUICE = RATIO_FRUIT_JUICE;
   };
 
   @Override
   public void run() {
     while (!clock.isLastOrder()) {
       // random number of customers
-      int numberOfCustomers = (new Random().nextInt(5) + 1);
+      int numberOfCustomers = ThreadLocalRandom.current().nextInt(1, 6);
       // allocate seats for customers
       for (; numberOfCustomers > 0 && table.seat.availablePermits() > 0; numberOfCustomers--, id++) {
         Customer customer = new Customer(clock, id, table, workers, stats, drinkRatio());
@@ -39,7 +39,7 @@ public class Crowd extends Thread {
       };
       // random interval to next batch
       try {
-        Thread.sleep((new Random().nextInt(5) + 1) * 500);
+        Thread.sleep(ThreadLocalRandom.current().nextInt(1, 6) * 500);
       } catch (Exception e) {};
     };
   };
@@ -47,9 +47,9 @@ public class Crowd extends Thread {
   // set customer preference 
   public int drinkRatio() {
     // randomly select a number
-    int rand = new Random().nextInt(ratioFruitJuice + ratioCappuccino) + 1;
+    int rand = ThreadLocalRandom.current().nextInt(1, RATIO_FRUIT_JUICE + RATIO_CAPPUCCINO + 1);
 
-    if (rand <= ratioCappuccino)
+    if (rand <= RATIO_CAPPUCCINO)
       // set order as cappuccino
       return 0;
     // set order as fruit juice

@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Customer extends Thread {
   Boolean ordered = false;
@@ -56,7 +56,7 @@ public class Customer extends Thread {
           // random drinking time
           System.out.println(getName() + " is drinking " + drinkName(drink));
           try {
-            Thread.sleep((new Random().nextInt(5) + 1) * 500);
+            Thread.sleep(ThreadLocalRandom.current().nextInt(1, 6) * 500);
           } catch (Exception e) {};
           // set end time
           endTime = System.nanoTime();

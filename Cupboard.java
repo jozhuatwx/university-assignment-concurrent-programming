@@ -1,5 +1,5 @@
-import java.util.Random;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Cupboard {
@@ -20,13 +20,13 @@ public class Cupboard {
     // open the cupboard
     lock.lock();
     try {
-      Thread.sleep((new Random().nextInt(3) + 1) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(1, 4) * 100);
     } catch (Exception e) {};
   };
 
   public void close() {
     try {
-      Thread.sleep((new Random().nextInt(3) + 1) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(1, 4) * 100);
     } catch (Exception e) {};
     // close the cupboard
     lock.unlock();
@@ -36,7 +36,7 @@ public class Cupboard {
   public void takeCup() {
     // take a cup
     try {
-      Thread.sleep((new Random().nextInt(5) + 3) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
     } catch (Exception e) {};
   };
 
@@ -44,7 +44,7 @@ public class Cupboard {
   public void takeGlass() {
     // take a glass
     try {
-      Thread.sleep((new Random().nextInt(5) + 3) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
     } catch (Exception e) {};
   };
 
@@ -54,7 +54,7 @@ public class Cupboard {
     if (coffee.availablePermits() > 0) {
       try {
         coffee.acquire();
-        Thread.sleep((new Random().nextInt(5) + 3) * 100);
+        Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
     } catch (Exception e) {};
       return true;
     };
@@ -64,7 +64,7 @@ public class Cupboard {
   public void returnCoffee() {
     // return coffee
     try {
-      Thread.sleep((new Random().nextInt(5) + 3) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
     } catch (Exception e) {};
     coffee.release();
   };
@@ -75,7 +75,7 @@ public class Cupboard {
     if (milk.availablePermits() > 0) {
       try {
         milk.acquire();
-        Thread.sleep((new Random().nextInt(5) + 3) * 100);
+        Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
       } catch (Exception e) {};
       return true;
     };
@@ -85,7 +85,7 @@ public class Cupboard {
   public void returnMilk() {
     // return milk
     try {
-      Thread.sleep((new Random().nextInt(5) + 3) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
     } catch (Exception e) {};
     milk.release();
   };

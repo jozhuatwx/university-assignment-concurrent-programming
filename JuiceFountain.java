@@ -1,5 +1,5 @@
-import java.util.Random;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class JuiceFountain {
   Semaphore tap;
@@ -15,7 +15,7 @@ public class JuiceFountain {
     if (tap.availablePermits() > 0) {
       try {
         tap.acquire();
-        Thread.sleep((new Random().nextInt(4) + 2) * 100);
+        Thread.sleep(ThreadLocalRandom.current().nextInt(2, 5) * 100);
       } catch (Exception e) {};
       return true;
     };
@@ -24,7 +24,7 @@ public class JuiceFountain {
 
   public void closeTap() {
     try {
-      Thread.sleep((new Random().nextInt(4) + 2) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(2, 5) * 100);
     } catch (Exception e) {};
     // close the tap
     tap.release();

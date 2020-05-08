@@ -1,6 +1,6 @@
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Table {
   Semaphore seat;
@@ -15,7 +15,7 @@ public class Table {
     try {
       // take seat
       seat.acquire();
-      Thread.sleep((new Random().nextInt(2) + 1) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(1, 3) * 100);
     } catch (Exception e) {};
 
     // add customer to list
@@ -27,7 +27,7 @@ public class Table {
     customers.remove(customer);
 
     try {
-      Thread.sleep((new Random().nextInt(2) + 1) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(1, 3) * 100);
       // release seat
       seat.release();
     } catch (Exception e) {};

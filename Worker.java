@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Worker extends Thread {
@@ -100,7 +100,7 @@ public class Worker extends Thread {
     // pour ingredients
     System.out.println(getName() + " pouring ingredients");
     try {
-      Thread.sleep((new Random().nextInt(20) + 10) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(10, 21) * 100);
     } catch (Exception e) {};
 
     // return ingredients
@@ -155,7 +155,7 @@ public class Worker extends Thread {
     try {
       // fill the glass
       System.out.println(getName() + " filling glass");
-      Thread.sleep((new Random().nextInt(15) + 10) * 100);
+      Thread.sleep(ThreadLocalRandom.current().nextInt(10, 16) * 100);
     } catch (Exception e) {};
     System.out.println(getName() + " closed juice fountain tap");
     juiceFountain.closeTap();
