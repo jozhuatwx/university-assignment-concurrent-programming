@@ -2,19 +2,20 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class JuiceFountain {
-  Semaphore tap;
+  // blank final
+  final Semaphore NUM_OF_FOUNTAIN_TAP;
 
   // constructor
   JuiceFountain(int NUM_OF_FOUNTAIN_TAP) {
-    this.tap = new Semaphore(NUM_OF_FOUNTAIN_TAP);
+    this.NUM_OF_FOUNTAIN_TAP = new Semaphore(NUM_OF_FOUNTAIN_TAP);
   };
 
   // tap
   public Boolean openTap() {
     // open the tap
-    if (tap.availablePermits() > 0) {
+    if (NUM_OF_FOUNTAIN_TAP.availablePermits() > 0) {
       try {
-        tap.acquire();
+        NUM_OF_FOUNTAIN_TAP.acquire();
         Thread.sleep(ThreadLocalRandom.current().nextInt(2, 5) * 100);
       } catch (Exception e) {};
       return true;
@@ -27,6 +28,6 @@ public class JuiceFountain {
       Thread.sleep(ThreadLocalRandom.current().nextInt(2, 5) * 100);
     } catch (Exception e) {};
     // close the tap
-    tap.release();
+    NUM_OF_FOUNTAIN_TAP.release();
   };
 };

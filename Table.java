@@ -3,18 +3,20 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Table {
-  Semaphore seat;
+  // blank final
+  final Semaphore NUM_OF_SEAT;
+  // initialise
   LinkedList<Customer> customers = new LinkedList<Customer>();
 
   // constructor
   Table(int NUM_OF_SEAT) {
-    this.seat = new Semaphore(NUM_OF_SEAT);
+    this.NUM_OF_SEAT = new Semaphore(NUM_OF_SEAT);
   };
 
   public void takeSeat(Customer customer) {
     try {
       // take seat
-      seat.acquire();
+      NUM_OF_SEAT.acquire();
       Thread.sleep(ThreadLocalRandom.current().nextInt(1, 3) * 100);
     } catch (Exception e) {};
 
@@ -29,7 +31,7 @@ public class Table {
     try {
       Thread.sleep(ThreadLocalRandom.current().nextInt(1, 3) * 100);
       // release seat
-      seat.release();
+      NUM_OF_SEAT.release();
     } catch (Exception e) {};
   };
 };

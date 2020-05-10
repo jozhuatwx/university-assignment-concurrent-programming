@@ -5,12 +5,12 @@ public class Owner extends Worker {
   Waiter[] waiters;
 
   // constructor
-  Owner(Clock clock, Table table, Cupboard cupboard, JuiceFountain juiceFountain, Waiter[] waiters) {
-    super(0, clock, cupboard, juiceFountain);
+  Owner(Clock clock, Table table, Cupboard cupboard, JuiceFountain juiceFountain, Waiter[] waiters, int COOLDOWN_INTERVAL) {
+    super(0, clock, cupboard, juiceFountain, COOLDOWN_INTERVAL);
     setName("Owner");
+    setPriority(Thread.MAX_PRIORITY);
     this.table = table;
     this.waiters = waiters;
-    this.setPriority(Thread.MAX_PRIORITY);
   };
 
   @Override
@@ -32,7 +32,7 @@ public class Owner extends Worker {
     System.out.println(getName() + ": Closing!");
 
     // finish current serve and prevent future serve
-    lock.lock();
+    orderLock.lock();
 
     // wait for all waiters to leave
     for (int i = 0; i < waiters.length; i++)

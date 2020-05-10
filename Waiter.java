@@ -1,9 +1,9 @@
 public class Waiter extends Worker {
   // constructor
-  Waiter(int id, Clock clock, Cupboard cupboard, JuiceFountain juiceFountain) {
-    super(id, clock, cupboard, juiceFountain);
+  Waiter(int id, Clock clock, Cupboard cupboard, JuiceFountain juiceFountain, int COOLDOWN_INTERVAL) {
+    super(id, clock, cupboard, juiceFountain, COOLDOWN_INTERVAL);
     setName("Waiter " + id);
-    this.setPriority(9);
+    setPriority(9);
   };
 
   @Override
@@ -17,11 +17,11 @@ public class Waiter extends Worker {
       } catch (Exception e) {};
     };
 
-      // finish current serve and prevent future serve
-      lock.lock();
-      // leave café
-      System.out.println(getName() + " left");
-      // set as no longer working
-      working = false;
+    // finish current serve and prevent future serve
+    orderLock.lock();
+    // leave café
+    System.out.println(getName() + " left");
+    // set as no longer working
+    working = false;
   };
 };

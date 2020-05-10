@@ -3,22 +3,22 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Cupboard {
+  // blank final
+  final Semaphore NUM_OF_COFFEE;
+  final Semaphore NUM_OF_MILK;
   // initialise
-  ReentrantLock lock = new ReentrantLock();
-
-  Semaphore coffee;
-  Semaphore milk;
+  ReentrantLock cupboardLock = new ReentrantLock();
 
   // constructor
   Cupboard(int NUM_OF_COFFEE, int NUM_OF_MILK) {
-    this.coffee = new Semaphore(NUM_OF_COFFEE);
-    this.milk = new Semaphore(NUM_OF_MILK);
+    this.NUM_OF_COFFEE = new Semaphore(NUM_OF_COFFEE);
+    this.NUM_OF_MILK = new Semaphore(NUM_OF_MILK);
   };
 
   // cupboard
   public void open() {
     // open the cupboard
-    lock.lock();
+    cupboardLock.lock();
     try {
       Thread.sleep(ThreadLocalRandom.current().nextInt(1, 4) * 100);
     } catch (Exception e) {};
@@ -29,7 +29,7 @@ public class Cupboard {
       Thread.sleep(ThreadLocalRandom.current().nextInt(1, 4) * 100);
     } catch (Exception e) {};
     // close the cupboard
-    lock.unlock();
+    cupboardLock.unlock();
   };
 
   // cup
@@ -51,9 +51,9 @@ public class Cupboard {
   // coffee
   public Boolean takeCoffee() {
     // take coffee
-    if (coffee.availablePermits() > 0) {
+    if (NUM_OF_COFFEE.availablePermits() > 0) {
       try {
-        coffee.acquire();
+        NUM_OF_COFFEE.acquire();
         Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
     } catch (Exception e) {};
       return true;
@@ -66,15 +66,15 @@ public class Cupboard {
     try {
       Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
     } catch (Exception e) {};
-    coffee.release();
+    NUM_OF_COFFEE.release();
   };
 
   // milk
   public Boolean takeMilk() {
     // take milk
-    if (milk.availablePermits() > 0) {
+    if (NUM_OF_MILK.availablePermits() > 0) {
       try {
-        milk.acquire();
+        NUM_OF_MILK.acquire();
         Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
       } catch (Exception e) {};
       return true;
@@ -87,6 +87,6 @@ public class Cupboard {
     try {
       Thread.sleep(ThreadLocalRandom.current().nextInt(3, 6) * 100);
     } catch (Exception e) {};
-    milk.release();
+    NUM_OF_MILK.release();
   };
 };

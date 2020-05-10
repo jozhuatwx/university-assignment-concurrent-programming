@@ -1,21 +1,23 @@
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Customer extends Thread {
-  Boolean ordered = false;
   Clock clock;
   Table table;
   Worker[] workers;
-  int drink;
   Statistics stats;
+  // blank final
+  final int ORDER;
+  // initialise
+  Boolean ordered = false;
 
   // constructor
-  Customer(Clock clock, int id, Table table, Worker[] workers, Statistics stats, int drink) {
+  Customer(Clock clock, int id, Table table, Worker[] workers, Statistics stats, int ORDER) {
     setName("Customer " + id);
     this.clock = clock;
     this.table = table;
     this.workers = workers;
     this.stats = stats;
-    this.drink = drink;
+    this.ORDER = ORDER;
   };
 
   @Override
@@ -49,12 +51,12 @@ public class Customer extends Thread {
       // try to ask workers to take order
       for (i = 0; i < workers.length; i++)
         if (workers[i].takeOrder()) {
-          System.out.println(getName() + " ordered " + drinkName(drink) + " from " + workers[i].getName());
+          System.out.println(getName() + " ordered " + orderName(ORDER) + " from " + workers[i].getName());
           ordered = true;
           // asks worker to serve order
           workers[i].serveOrder(this);
           // random drinking time
-          System.out.println(getName() + " is drinking " + drinkName(drink));
+          System.out.println(getName() + " is drinking " + orderName(ORDER));
           try {
             Thread.sleep(ThreadLocalRandom.current().nextInt(1, 6) * 500);
           } catch (Exception e) {};
@@ -76,8 +78,8 @@ public class Customer extends Thread {
     };
   };
 
-  public String drinkName(int drink) {
-    switch (drink) {
+  public String orderName(int order) {
+    switch (order) {
       // cappuccino
       case 0:
         return "cappucino";

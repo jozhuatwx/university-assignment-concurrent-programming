@@ -2,32 +2,35 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Worker extends Thread {
-  Boolean working = true;
-  int id;
-  int cooldown = 1;
-  final int COOLDOWN_INTERVAL = 5;
-  ReentrantLock lock = new ReentrantLock();
   Clock clock;
   Cupboard cupboard;
   JuiceFountain juiceFountain;
+  // blank final
+  final int COOLDOWN_INTERVAL;
+  // initialise
+  int id;
+  int cooldown = 1;
+  Boolean working = true;
+  ReentrantLock orderLock = new ReentrantLock();
 
   // constructor
-  Worker(int id, Clock clock, Cupboard cupboard, JuiceFountain juiceFountain) {
+  Worker(int id, Clock clock, Cupboard cupboard, JuiceFountain juiceFountain, int COOLDOWN_INTERVAL) {
     this.id = id;
     this.clock = clock;
     this.cupboard = cupboard;
     this.juiceFountain = juiceFountain;
+    this.COOLDOWN_INTERVAL = COOLDOWN_INTERVAL;
   };
 
   // take customers' order
   public Boolean takeOrder() {
-    return lock.tryLock();
+    return orderLock.tryLock();
   };
 
   // serve customers' order
   public void serveOrder(Customer customer) {
     // random order
-    switch (customer.drink) {
+    switch (customer.ORDER) {
         // cappuccino
       case 0:
         serveCappuccino();
@@ -43,8 +46,7 @@ public class Worker extends Thread {
       default:
         break;
     };
-    
-    lock.unlock();
+    orderLock.unlock();
   };
 
   // serve cappucino
@@ -59,15 +61,17 @@ public class Worker extends Thread {
     // take coffee and milk
     do {
       // reduce speed
-      try {
-        // set wait time to prioritise number of executions and id
-        Thread.sleep(cooldown * id);
-      } catch (Exception e) {};
+      if (!clock.isLastOrder()) {
+        try {
+          // set wait time to prioritise number of executions and id
+          Thread.sleep(cooldown + (id * 10));
+        } catch (Exception e) {};
+      };
 
       // check if ingredients are available
-      if (!cupboard.lock.isHeldByCurrentThread())
+      if (!cupboard.cupboardLock.isHeldByCurrentThread())
         cupboard.open();
-      
+
       checkCoffee = cupboard.takeCoffee();
       checkMilk = cupboard.takeMilk();
 
@@ -108,10 +112,10 @@ public class Worker extends Thread {
 
     cupboard.returnCoffee();
     System.out.println(getName() + " returned coffee");
-    
+
     cupboard.returnMilk();
     System.out.println(getName() + " returned milk");
-    
+
     cupboard.close();
 
     // mixing drink
@@ -129,13 +133,13 @@ public class Worker extends Thread {
 
     cupboard.takeGlass();
     System.out.println(getName() + " took a glass");
-    
+
     cupboard.close();
 
     // use juice fountain
     do {
       // reduce speed
-      if (!clock.isLastOrder() || id != 0) {
+      if (!clock.isLastOrder()) {
         try {
           // set wait time to prioritise number of executions and id
           Thread.sleep(cooldown + (id * 10));
@@ -150,13 +154,14 @@ public class Worker extends Thread {
       if (cooldown > COOLDOWN_INTERVAL)
       cooldown -= COOLDOWN_INTERVAL;
     } while (!checkTap);
-    
+
     // use juice fountain
     try {
       // fill the glass
       System.out.println(getName() + " filling glass");
       Thread.sleep(ThreadLocalRandom.current().nextInt(10, 16) * 100);
     } catch (Exception e) {};
+
     System.out.println(getName() + " closed juice fountain tap");
     juiceFountain.closeTap();
   };

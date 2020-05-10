@@ -1,21 +1,25 @@
 public class Clock extends Thread {
+  // blank final
+  final int CLOCK_INTERVAL;
+  final int LAST_ORDER_TIME;
+  final int CLOSING_TIME;
+  // initialise
   int time = 0;
-  int lastOrder;
-  int closing;
 
   // constructor
-  Clock(int LAST_ORDER_TIME, int CLOSING_TIME) {
-    this.setName("Clock");
-    this.lastOrder = LAST_ORDER_TIME;
-    this.closing = CLOSING_TIME;
+  Clock(int CLOCK_INTERVAL, int LAST_ORDER_TIME, int CLOSING_TIME) {
+    setName("Clock");
+    this.CLOCK_INTERVAL = CLOCK_INTERVAL;
+    this.LAST_ORDER_TIME = LAST_ORDER_TIME;
+    this.CLOSING_TIME = CLOSING_TIME;
   };
 
   @Override
   public void run() {
     // operating time
-    for (; time < lastOrder; time++)
+    for (; time < LAST_ORDER_TIME; time++)
       try {
-        Thread.sleep(1000);
+        Thread.sleep(CLOCK_INTERVAL);
       } catch (Exception e) {};
 
     // notify last call
@@ -24,9 +28,9 @@ public class Clock extends Thread {
     };
 
     // last order time
-    for (; time < closing; time++)
+    for (; time < CLOSING_TIME; time++)
       try {
-        Thread.sleep(1000);
+        Thread.sleep(CLOCK_INTERVAL);
       } catch (Exception e) {};
 
     // notify closing
@@ -37,11 +41,11 @@ public class Clock extends Thread {
 
   // check if past last order
   public Boolean isLastOrder() {
-    return (time >= lastOrder);
+    return (time >= LAST_ORDER_TIME);
   };
 
   // check if past closing
   public Boolean isClosing() {
-    return (time >= closing);
+    return (time >= CLOSING_TIME);
   };
 };

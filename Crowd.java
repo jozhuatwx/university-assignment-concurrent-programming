@@ -1,17 +1,19 @@
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Crowd extends Thread {
-  int id = 1;
   Clock clock;
   Table table;
   Worker[] workers;
   Statistics stats;
-  int RATIO_CAPPUCCINO;
-  int RATIO_FRUIT_JUICE;
+  // blank final
+  final int RATIO_CAPPUCCINO;
+  final int RATIO_FRUIT_JUICE;
+  // initialise
+  int id = 1;
 
   // constructor
   Crowd(Clock clock, Table table, Worker[] workers, Statistics stats, int RATIO_CAPPUCCINO, int RATIO_FRUIT_JUICE) {
-    this.setName("Customers");
+    setName("Crowd");
     this.clock = clock;
     this.table = table;
     this.workers = workers;
@@ -26,7 +28,7 @@ public class Crowd extends Thread {
       // random number of customers
       int numberOfCustomers = ThreadLocalRandom.current().nextInt(1, 6);
       // allocate seats for customers
-      for (; numberOfCustomers > 0 && table.seat.availablePermits() > 0; numberOfCustomers--, id++) {
+      for (; numberOfCustomers > 0 && table.NUM_OF_SEAT.availablePermits() > 0; numberOfCustomers--, id++) {
         Customer customer = new Customer(clock, id, table, workers, stats, drinkRatio());
         table.takeSeat(customer);
         customer.start();
